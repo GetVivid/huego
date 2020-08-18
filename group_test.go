@@ -1,8 +1,9 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetGroups(t *testing.T) {
@@ -53,6 +54,7 @@ func TestGetGroups(t *testing.T) {
 
 	assert.True(t, contains("Group 1", groups))
 	assert.True(t, contains("Group 2", groups))
+	assert.True(t, contains("Group 3", groups))
 
 	b.Host = badHostname
 	_, err = b.GetGroups()

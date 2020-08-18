@@ -1884,3 +1884,85 @@ func (b *Bridge) GetCapabilitiesContext(ctx context.Context) (*Capabilities, err
 
 	return s, err
 }
+
+/*
+
+	ENTERTAINMENT GROUP API
+
+*/
+// GetGroups returns all groups known to the bridge
+func (b *Bridge) GetEntertainmentGroups() ([]EntertainmentGroup, error) {
+	return b.GetEntertainmentGroupsContext(context.Background())
+}
+
+// GetGroupsContext returns all groups known to the bridge
+func (b *Bridge) GetEntertainmentGroupsContext(ctx context.Context) ([]EntertainmentGroup, error) {
+
+	var m map[string]EntertainmentGroup
+
+	url, err := b.getAPIPath("/groups/")
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := get(ctx, url)
+	if err != nil {
+		return nil, err
+	}
+
+	err = unmarshal(res, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	groups := make([]EntertainmentGroup, 0, len(m))
+
+	for i, g := range m {
+		if g.Type == "Entertainment" {
+			g.ID, err = strconv.Atoi(i)
+			if err != nil {
+				return nil, err
+			}
+			g.bridge = b
+			groups = append(groups, g)
+		}
+	}
+
+	return groups, err
+
+}
+
+// GetGroup returns one group known to the bridge by its id
+func (b *Bridge) GetEntertainmentGroup(i int) (*EntertainmentGroup, error) {
+	return b.GetEntertainmentGroupContext(context.Background(), i)
+}
+
+// GetGroupContext returns one group known to the bridge by its id
+func (b *Bridge) GetEntertainmentGroupContext(ctx context.Context, i int) (*EntertainmentGroup, error) {
+
+	g := &EntertainmentGroup{
+		ID: i,
+	}
+
+	url, err := b.getAPIPath("/groups/", strconv.Itoa(i))
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := get(ctx, url)
+	if err != nil {
+		return nil, err
+	}
+
+	err = unmarshal(res, &g)
+	if err != nil {
+		return nil, err
+	}
+
+	g.bridge = b
+	if g.Type != "Entertainment" {
+		return nil, nil
+	}
+
+	return g, nil
+}

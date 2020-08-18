@@ -2,11 +2,12 @@ package huego
 
 import (
 	"fmt"
-	"github.com/jarcoal/httpmock"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path"
 	"testing"
+
+	"github.com/jarcoal/httpmock"
+	"github.com/stretchr/testify/assert"
 )
 
 // I'm too lazy to have this elsewhere
@@ -108,12 +109,17 @@ func init() {
 		{
 			method: "GET",
 			path:   "/groups",
-			data:   `{"1":{"name":"Group 1","lights":["1","2"],"type":"LightGroup","state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":254,"hue":10000,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}},"2":{"name":"Group 2","lights":["3","4","5"],"type":"LightGroup","state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}}}`,
+			data:   `{"1":{"name":"Group 1","lights":["1","2"],"type":"LightGroup","state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":254,"hue":10000,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}},"2":{"name":"Group 2","lights":["3","4","5"],"type":"LightGroup","state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}},"3":{"name":"Group 3","lights":["6","7","8"],"type":"Entertainment", "stream":{"proxymode":"auto","proxynode":"/bridge","active":false,"owner":null},"locations":{"6":[-1.00,-1.00,0.00],"7":[1.00,-1.00,0.00],"8":[0.00,0.00,0.00]},"state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}}}`,
 		},
 		{
 			method: "GET",
 			path:   "/groups/1",
 			data:   `{"action":{"on":true,"hue":0,"effect":"none","bri":100,"sat":100,"ct":500,"xy":[0.5,0.5]},"lights":["1","2"],"state":{"any_on":true,"all_on":true},"type":"Room","class":"Bedroom","name":"Masterbedroom"}`,
+		},
+		{
+			method: "GET",
+			path:   "/groups/3",
+			data:   `{"name":"Group 3","lights":["6","7","8"],"type":"Entertainment", "stream":{"proxymode":"auto","proxynode":"/bridge","active":false,"owner":null},"locations":{"6":[-1.00,-1.00,0.00],"7":[1.00,-1.00,0.00],"8":[0.00,0.00,0.00]},"state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}}`,
 		},
 		{
 			method: "PUT",
