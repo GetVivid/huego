@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetSensors(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	sensors, err := b.GetSensors()
 	if err != nil {
 		t.Fatal(err)
@@ -43,7 +44,7 @@ func TestGetSensors(t *testing.T) {
 }
 
 func TestGetSensor(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	sensor, err := b.GetSensor(1)
 	if err != nil {
 		t.Fatal(err)
@@ -66,7 +67,7 @@ func TestGetSensor(t *testing.T) {
 }
 
 func TestCreateSensor(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	sensor := &Sensor{
 		Name: "New Sensor",
 	}
@@ -85,7 +86,7 @@ func TestCreateSensor(t *testing.T) {
 }
 
 func TestFindSensors(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	resp, err := b.FindSensors()
 	if err != nil {
 		t.Fatal(err)
@@ -100,7 +101,7 @@ func TestFindSensors(t *testing.T) {
 }
 
 func TestGetNewSensors(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	newSensors, err := b.GetNewSensors()
 	if err != nil {
 		t.Fatal(err)
@@ -134,7 +135,7 @@ func TestGetNewSensors(t *testing.T) {
 }
 
 func TestUpdateSensor(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	sensor := &Sensor{
 		Name: "New Sensor",
@@ -153,7 +154,7 @@ func TestUpdateSensor(t *testing.T) {
 }
 
 func TestUpdateSensorConfig(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	resp, err := b.UpdateSensorConfig(id, "test")
 	if err != nil {
@@ -169,7 +170,7 @@ func TestUpdateSensorConfig(t *testing.T) {
 }
 
 func TestDeleteSensor(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	err := b.DeleteSensor(id)
 	if err != nil {

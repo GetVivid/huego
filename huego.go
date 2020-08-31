@@ -262,7 +262,8 @@ func DiscoverContext(ctx context.Context) (*Bridge, error) {
 
 // New instantiates and returns a new Bridge. New accepts hostname/ip address to the bridge (h) as well as an username (u).
 // h may or may not be prefixed with http(s)://. For example http://192.168.1.20/ or 192.168.1.20.
-// u is a username known to the bridge. Use Discover() and CreateUser() to create a user.
-func New(h, u string) *Bridge {
-	return &Bridge{h, u, ""}
+// u is a username known to the bridge, c is the clientkey generated when creating a user.
+// Use Discover() and CreateUser() to create a user.
+func New(h, u, c string) *Bridge {
+	return &Bridge{h, u, c, ""}
 }

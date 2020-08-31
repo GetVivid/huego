@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetConfig(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	config, err := b.GetConfig()
 	if err != nil {
 		t.Fatal(err)
@@ -64,7 +65,7 @@ func TestGetConfig(t *testing.T) {
 }
 
 func TestGetConfigError(t *testing.T) {
-	b := New(badHostname, username)
+	b := New(badHostname, username, clientKey)
 	_, err := b.GetConfig()
 	if err == nil {
 		t.Fatal("Expected error not to be nil")
@@ -72,8 +73,8 @@ func TestGetConfigError(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-	b := New(hostname, "")
-	u, err := b.CreateUser("github.com/amimof/huego#go test")
+	b := New(hostname, "", "")
+	u, _, err := b.CreateUser("github.com/amimof/huego#go test")
 	if err != nil {
 		t.Fatal(err)
 	} else {
@@ -82,15 +83,15 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestCreateUserError(t *testing.T) {
-	b := New(badHostname, username)
-	_, err := b.CreateUser("github.com/amimof/huego#go test")
+	b := New(badHostname, username, "")
+	_, _, err := b.CreateUser("github.com/amimof/huego#go test")
 	if err == nil {
 		t.Fatal("Expected error not to be nil")
 	}
 }
 
 func TestGetUsers(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	users, err := b.GetUsers()
 	if err != nil {
 		t.Fatal(err)
@@ -116,7 +117,7 @@ func TestGetUsers(t *testing.T) {
 }
 
 func TestGetUsersError(t *testing.T) {
-	b := New(badHostname, username)
+	b := New(badHostname, username, clientKey)
 	_, err := b.GetUsers()
 	if err == nil {
 		t.Fatal("Expected error not to be nil")
@@ -124,7 +125,7 @@ func TestGetUsersError(t *testing.T) {
 }
 
 func TestDeleteUser(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	err := b.DeleteUser("ffffffffe0341b1b376a2389376a2389")
 	if err != nil {
 		t.Fatal(err)
@@ -133,7 +134,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestGetFullState(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	_, err := b.GetFullState()
 	if err != nil {
 		t.Fatal(err)
@@ -141,7 +142,7 @@ func TestGetFullState(t *testing.T) {
 }
 
 func TestGetFullStateError(t *testing.T) {
-	b := New(badHostname, username)
+	b := New(badHostname, username, clientKey)
 	_, err := b.GetFullState()
 	if err == nil {
 		t.Fatal("Expected error not to be nil")

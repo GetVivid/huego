@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetScenes(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scenes, err := b.GetScenes()
 	if err != nil {
 		t.Fatal(err)
@@ -48,7 +49,7 @@ func TestGetScenes(t *testing.T) {
 }
 
 func TestGetScene(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := "4e1c6b20e-on-0"
 	s, err := b.GetScene(id)
 	if err != nil {
@@ -78,7 +79,7 @@ func TestGetScene(t *testing.T) {
 }
 
 func TestCreateScene(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scene := &Scene{
 		Name:    "New Scene",
 		Lights:  []string{"4", "5"},
@@ -99,7 +100,7 @@ func TestCreateScene(t *testing.T) {
 }
 
 func TestUpdateScene(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scene, err := b.GetScene("4e1c6b20e-on-0")
 	if err != nil {
 		t.Fatal(err)
@@ -123,7 +124,7 @@ func TestUpdateScene(t *testing.T) {
 }
 
 func TestSetSceneLightState(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scene, err := b.GetScene("4e1c6b20e-on-0")
 	if err != nil {
 		t.Fatal(err)
@@ -149,7 +150,7 @@ func TestSetSceneLightState(t *testing.T) {
 }
 
 func TestDeleteScene(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scene, err := b.GetScene("4e1c6b20e-on-0")
 	if err != nil {
 		t.Fatal(err)
@@ -162,7 +163,7 @@ func TestDeleteScene(t *testing.T) {
 }
 
 func TestRecallScene(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	scene := "4e1c6b20e-on-0"
 	group := 1
 	resp, err := b.RecallScene("HcK1mEcgS7gcVcT", group)
@@ -180,7 +181,7 @@ func TestRecallScene(t *testing.T) {
 }
 
 func TestRecallScene2(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	group := 1
 	scene, err := b.GetScene("4e1c6b20e-on-0")
 	if err != nil {

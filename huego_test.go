@@ -15,6 +15,7 @@ import (
 // export HUE_HOSTNAME=192.168.1.59
 
 var username string
+var clientKey string
 var hostname string
 var badHostname = "bad-hue-config"
 
@@ -22,6 +23,7 @@ func init() {
 
 	hostname = os.Getenv("HUE_HOSTNAME")
 	username = os.Getenv("HUE_USERNAME")
+	clientKey = os.Getenv("HUE_CLIENTKEY")
 
 	tests := []struct {
 		method string
@@ -60,7 +62,7 @@ func init() {
 		{
 			method: "POST",
 			path:   "",
-			data:   `[{"success":{"username": "83b7780291a6ceffbe0bd049104df"}}]`,
+			data:   `[{"success":{"username": "83b7780291a6ceffbe0bd049104df", "clientkey":"E3B550C65F78022EFD9E52E28378583"}}]`,
 		},
 		{
 			method: "DELETE",
@@ -122,9 +124,24 @@ func init() {
 			data:   `{"name":"Group 3","lights":["6","7","8"],"type":"Entertainment", "stream":{"proxymode":"auto","proxynode":"/bridge","active":false,"owner":null},"locations":{"6":[-1.00,-1.00,0.00],"7":[1.00,-1.00,0.00],"8":[0.00,0.00,0.00]},"state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}}`,
 		},
 		{
+			method: "GET",
+			path:   "/groups/4",
+			data:   `{"name":"Group 3","lights":["6","7","8"],"type":"Entertainment", "stream":{"proxymode":"auto","proxynode":"/bridge","active":false,"owner":null},"locations":{"6":[-1.00,-1.00,0.00],"7":[1.00,-1.00,0.00],"8":[0.00,0.00,0.00]},"state":{"all_on":true,"any_on":true},"action":{"on":true,"bri":153,"hue":4345,"sat":254,"effect":"none","xy":[0.5,0.5],"ct":250,"alert":"select","colormode":"ct"}}`,
+		},
+		{
 			method: "PUT",
 			path:   "/groups/1",
 			data:   `[{"success":{"/groups/1/lights":["1"]}},{"success":{"/groups/1/name":"Bedroom"}}]`,
+		},
+		{
+			method: "PUT",
+			path:   "/groups/3",
+			data:   `[{"success":{"/groups/3/lights":["1"]}},{"success":{"/groups/1/name":"Bedroom"}}]`,
+		},
+		{
+			method: "PUT",
+			path:   "/groups/4",
+			data:   `[{"success":{"/groups/15/stream/active":true}}]`,
 		},
 		{
 			method: "PUT",
@@ -389,7 +406,7 @@ func TestDiscoverAndLogin(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	bridge = bridge.Login(username)
+	bridge = bridge.Login(username, clientKey)
 	t.Logf("Successfully logged in to bridge")
 }
 

@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetSchedules(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	schedules, err := b.GetSchedules()
 	if err != nil {
 		t.Fatal(err)
@@ -46,7 +47,7 @@ func TestGetSchedules(t *testing.T) {
 }
 
 func TestGetSchedule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	s, err := b.GetSchedule(1)
 	if err != nil {
 		t.Fatal(err)
@@ -64,7 +65,7 @@ func TestGetSchedule(t *testing.T) {
 }
 
 func TestCreateSchedule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	command := &Command{
 		Address: "/api/" + username + "/lights/0",
 		Body: &struct {
@@ -96,7 +97,7 @@ func TestCreateSchedule(t *testing.T) {
 }
 
 func TestUpdateSchedule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	schedule := &Schedule{
 		Name:        "New Scehdule",
@@ -118,7 +119,7 @@ func TestUpdateSchedule(t *testing.T) {
 }
 
 func TestDeleteSchedule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	err := b.DeleteSchedule(id)
 	if err != nil {

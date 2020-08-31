@@ -12,9 +12,10 @@ import (
 
 // Bridge exposes a hardware bridge through a struct.
 type Bridge struct {
-	Host string `json:"internalipaddress,omitempty"`
-	User string
-	ID   string `json:"id,omitempty"`
+	Host      string `json:"internalipaddress,omitempty"`
+	User      string
+	ClientKey string
+	ID        string `json:"id,omitempty"`
 }
 
 func (b *Bridge) getAPIPath(str ...string) (string, error) {
@@ -36,9 +37,10 @@ func (b *Bridge) getAPIPath(str ...string) (string, error) {
 }
 
 // Login calls New() and passes Host on this Bridge instance.
-func (b *Bridge) Login(u string) *Bridge {
+func (b *Bridge) Login(u string, c string) *Bridge {
 	b.User = u
-	return New(b.Host, u)
+	b.ClientKey = c
+	return New(b.Host, u, c)
 }
 
 /*
@@ -86,13 +88,13 @@ func (b *Bridge) GetConfigContext(ctx context.Context) (*Config, error) {
 
 // CreateUser creates a user by adding n to the list of whitelists in the bridge.
 // The link button on the bridge must have been pressed before calling CreateUser.
-func (b *Bridge) CreateUser(n string) (string, error) {
+func (b *Bridge) CreateUser(n string) (string, string, error) {
 	return b.CreateUserContext(context.Background(), n)
 }
 
 // CreateUserContext creates a user by adding n to the list of whitelists in the bridge.
 // The link button on the bridge must have been pressed before calling CreateUser.
-func (b *Bridge) CreateUserContext(ctx context.Context, n string) (string, error) {
+func (b *Bridge) CreateUserContext(ctx context.Context, n string) (string, string, error) {
 
 	var a []*APIResponse
 
@@ -103,31 +105,30 @@ func (b *Bridge) CreateUserContext(ctx context.Context, n string) (string, error
 
 	url, err := b.getAPIPath("/")
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	data, err := json.Marshal(&body)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	res, err := post(ctx, url, data)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	err = unmarshal(res, &a)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	resp, err := handleResponse(a)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return resp.Success["username"].(string), nil
-
+	return resp.Success["username"].(string), resp.Success["clientkey"].(string), nil
 }
 
 // GetUsers returns a list of whitelists from the bridge
@@ -1965,4 +1966,115 @@ func (b *Bridge) GetEntertainmentGroupContext(ctx context.Context, i int) (*Ente
 	}
 
 	return g, nil
+}
+
+// CreateGroup creates one new group with attributes defined by g
+func (b *Bridge) CreateEntertainmentGroup(g EntertainmentGroup) (*Response, error) {
+	return b.CreateEntertainmentGroupContext(context.Background(), g)
+}
+
+// CreateGroupContext creates one new group with attributes defined by g
+func (b *Bridge) CreateEntertainmentGroupContext(ctx context.Context, g EntertainmentGroup) (*Response, error) {
+
+	var a []*APIResponse
+	g.Type = "Entertainment"
+
+	url, err := b.getAPIPath("/groups/")
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := json.Marshal(&g)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := post(ctx, url, data)
+	if err != nil {
+		return nil, err
+	}
+
+	err = unmarshal(res, &a)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := handleResponse(a)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+// UpdateEntertainmentGroup updates one group known to the bridge
+func (b *Bridge) UpdateEntertainmentGroup(i int, l EntertainmentGroup) (*Response, error) {
+	return b.UpdateEntertainmentGroupContext(context.Background(), i, l)
+}
+
+// UpdateEntertainmentGroupContext updates one group known to the bridge
+func (b *Bridge) UpdateEntertainmentGroupContext(ctx context.Context, i int, l EntertainmentGroup) (*Response, error) {
+
+	var a []*APIResponse
+
+	id := strconv.Itoa(i)
+	url, err := b.getAPIPath("/groups/", id)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := json.Marshal(&l)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := put(ctx, url, data)
+	if err != nil {
+		return nil, err
+	}
+
+	err = unmarshal(res, &a)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := handleResponse(a)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+func (b *Bridge) StartEntertainmentGroup(i int) (*Response, error) {
+	return b.StartEntertainmentGroupContext(context.Background(), i)
+}
+
+func (b *Bridge) StartEntertainmentGroupContext(ctx context.Context, i int) (*Response, error) {
+	var a []*APIResponse
+
+	id := strconv.Itoa(i)
+	url, err := b.getAPIPath("/groups/", id)
+	if err != nil {
+		return nil, err
+	}
+
+	data := []byte(`{"stream":{"active":true}}`)
+
+	res, err := put(ctx, url, data)
+	if err != nil {
+		return nil, err
+	}
+
+	err = unmarshal(res, &a)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := handleResponse(a)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
 }

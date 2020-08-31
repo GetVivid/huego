@@ -7,7 +7,7 @@ import (
 )
 
 func TestGetEntertainmentGroups(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	groups, err := b.GetEntertainmentGroups()
 	if err != nil {
 		t.Fatal(err)
@@ -72,7 +72,7 @@ func TestGetEntertainmentGroups(t *testing.T) {
 }
 
 func TestGetEntertainmentGroup(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	g, err := b.GetEntertainmentGroup(3)
 	if err != nil {
 		t.Fatal(err)
@@ -119,5 +119,89 @@ func TestGetEntertainmentGroup(t *testing.T) {
 
 	b.Host = badHostname
 	_, err = b.GetEntertainmentGroup(3)
+	assert.NotNil(t, err)
+}
+
+func TestCreateEntertainmentGroup(t *testing.T) {
+	b := New(hostname, username, clientKey)
+	group := EntertainmentGroup{
+		Name:   "TestGroup",
+		Type:   "Entertainment",
+		Class:  "Office",
+		Lights: []string{},
+	}
+	resp, err := b.CreateEntertainmentGroup(group)
+	if err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("Entertainment Group created")
+		for k, v := range resp.Success {
+			t.Logf("%v: %s", k, v)
+		}
+	}
+
+	b.Host = badHostname
+	_, err = b.CreateEntertainmentGroup(group)
+	assert.NotNil(t, err)
+
+}
+
+func TestUpdateEntertainmentGroup(t *testing.T) {
+	b := New(hostname, username, clientKey)
+	id := 1
+	group := EntertainmentGroup{
+		Name:  "TestGroup (Updated)",
+		Class: "Office",
+	}
+	resp, err := b.UpdateEntertainmentGroup(id, group)
+	if err != nil {
+		t.Fatal(err)
+	} else {
+		t.Logf("Updated group with id %d", id)
+		for k, v := range resp.Success {
+			t.Logf("%v: %s", k, v)
+		}
+	}
+
+	b.Host = badHostname
+	_, err = b.UpdateEntertainmentGroup(id, group)
+	assert.NotNil(t, err)
+
+}
+
+func TestRenameEntertainmentGroup(t *testing.T) {
+	bridge := New(hostname, username, clientKey)
+	id := 3
+	group, err := bridge.GetEntertainmentGroup(id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	newName := "MyGroup (renamed)"
+	err = group.Rename(newName)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("Group renamed to %s", group.Name)
+
+	bridge.Host = badHostname
+	err = group.Rename(newName)
+	assert.NotNil(t, err)
+
+}
+
+func TestStartEntertainmentGroup(t *testing.T) {
+	bridge := New(hostname, username, clientKey)
+	id := 4
+	group, err := bridge.GetEntertainmentGroup(id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = group.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	bridge.Host = badHostname
+	err = group.Start()
 	assert.NotNil(t, err)
 }

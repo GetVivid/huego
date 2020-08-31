@@ -5,7 +5,7 @@ import (
 )
 
 func TestGetCapabilities(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	c, err := b.GetCapabilities()
 	if err != nil {
 		t.Fatal(c)
@@ -30,7 +30,7 @@ func TestGetCapabilities(t *testing.T) {
 }
 
 func TestGetCapabilitiesError(t *testing.T) {
-	b := New(badHostname, username)
+	b := New(badHostname, username, clientKey)
 	_, err := b.GetCapabilities()
 	if err == nil {
 		t.Fatal("Expected error not to be nil")

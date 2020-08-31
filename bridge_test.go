@@ -3,24 +3,25 @@ package huego
 import (
 	"context"
 	"fmt"
-	"github.com/jarcoal/httpmock"
 	"strings"
 	"testing"
+
+	"github.com/jarcoal/httpmock"
 )
 
 func ExampleBridge_CreateUser() {
 	bridge, _ := Discover()
-	user, err := bridge.CreateUser("my awesome hue app") // Link button needs to be pressed
+	user, _, err := bridge.CreateUser("my awesome hue app") // Link button needs to be pressed
 	if err != nil {
 		fmt.Printf("Error creating user: %s", err.Error())
 	}
-	bridge = bridge.Login(user)
+	bridge = bridge.Login(user, clientKey)
 	light, _ := bridge.GetLight(1)
 	light.Off()
 }
 
 func TestLogin(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	c, err := b.GetConfig()
 	if err != nil {
 		t.Fatal(err)
@@ -30,8 +31,8 @@ func TestLogin(t *testing.T) {
 }
 
 func TestLoginUnauthorized(t *testing.T) {
-	b := New(hostname, "")
-	b = b.Login("invalid_password")
+	b := New(hostname, "", "")
+	b = b.Login("invalid_password", "")
 	_, err := b.GetLights()
 	if err != nil {
 		if strings.Contains(err.Error(), "unauthorized user") == false {
@@ -43,7 +44,7 @@ func TestLoginUnauthorized(t *testing.T) {
 }
 
 func TestUpdateBridgeConfig(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	c, err := b.GetConfig()
 	if err != nil {
 		t.Fatal(err)
@@ -55,7 +56,7 @@ func TestUpdateBridgeConfig(t *testing.T) {
 }
 
 func TestUpdateBridgeConfigError(t *testing.T) {
-	b := New(badHostname, username)
+	b := New(badHostname, username, clientKey)
 	_, err := b.GetConfig()
 	if err == nil {
 		t.Fatal("Expected error not to be nil")
@@ -63,7 +64,7 @@ func TestUpdateBridgeConfigError(t *testing.T) {
 }
 
 func TestBridge_getAPIPathError(t *testing.T) {
-	b := New("invalid hostname", "")
+	b := New("invalid hostname", "", "")
 	expected := "parse http://invalid hostname: invalid character \" \" in host name"
 	_, err := b.getAPIPath("/")
 	if err.Error() != expected {

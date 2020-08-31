@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetLights(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	lights, err := b.GetLights()
 	if err != nil {
 		t.Fatal(err)
@@ -41,7 +42,7 @@ func TestGetLights(t *testing.T) {
 }
 
 func TestGetLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	l, err := b.GetLight(1)
 	if err != nil {
 		t.Fatal(err)
@@ -81,7 +82,7 @@ func TestGetLight(t *testing.T) {
 }
 
 func TestSetLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	state := State{
 		On:  true,
@@ -103,7 +104,7 @@ func TestSetLight(t *testing.T) {
 }
 
 func TestFindLights(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	resp, err := b.FindLights()
 	if err != nil {
 		t.Fatal(err)
@@ -119,7 +120,7 @@ func TestFindLights(t *testing.T) {
 }
 
 func TestUpdateLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light := Light{
 		Name: "New Light",
@@ -139,7 +140,7 @@ func TestUpdateLight(t *testing.T) {
 }
 
 func TestTurnOffLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -157,7 +158,7 @@ func TestTurnOffLight(t *testing.T) {
 }
 
 func TestTurnOnLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -175,7 +176,7 @@ func TestTurnOnLight(t *testing.T) {
 }
 
 func TestIfLightIsOn(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -185,7 +186,7 @@ func TestIfLightIsOn(t *testing.T) {
 }
 
 func TestRenameLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -204,7 +205,7 @@ func TestRenameLight(t *testing.T) {
 }
 
 func TestSetLightBri(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -222,7 +223,7 @@ func TestSetLightBri(t *testing.T) {
 }
 
 func TestSetLightHue(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -240,7 +241,7 @@ func TestSetLightHue(t *testing.T) {
 }
 
 func TestSetLightSat(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -258,7 +259,7 @@ func TestSetLightSat(t *testing.T) {
 }
 
 func TestSetLightXy(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -277,7 +278,7 @@ func TestSetLightXy(t *testing.T) {
 }
 
 func TestSetLightCt(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -295,7 +296,7 @@ func TestSetLightCt(t *testing.T) {
 }
 
 func TestSetLightTransitionTime(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -313,7 +314,7 @@ func TestSetLightTransitionTime(t *testing.T) {
 }
 
 func TestSetLightEffect(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -331,7 +332,7 @@ func TestSetLightEffect(t *testing.T) {
 }
 
 func TestSetLightAlert(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
@@ -349,7 +350,7 @@ func TestSetLightAlert(t *testing.T) {
 }
 
 func TestSetStateLight(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	light, err := b.GetLight(id)
 	if err != nil {
