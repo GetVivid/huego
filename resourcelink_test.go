@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetResourcelinks(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	resourcelinks, err := b.GetResourcelinks()
 	if err != nil {
 		t.Fatal(err)
@@ -41,7 +42,7 @@ func TestGetResourcelinks(t *testing.T) {
 }
 
 func TestGetResourcelink(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	l, err := b.GetResourcelink(1)
 	if err != nil {
 		t.Fatal(err)
@@ -60,7 +61,7 @@ func TestGetResourcelink(t *testing.T) {
 }
 
 func TestCreateResourcelink(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	resourcelink := &Resourcelink{
 		Name:        "Huego Test Resourcelink",
 		Description: "Amir's wakeup experience",
@@ -84,7 +85,7 @@ func TestCreateResourcelink(t *testing.T) {
 }
 
 func TestUpdateResourcelink(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	rl := &Resourcelink{
 		Name:        "New Resourcelink",
@@ -105,7 +106,7 @@ func TestUpdateResourcelink(t *testing.T) {
 }
 
 func TestDeleteResourcelink(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	err := b.DeleteResourcelink(1)
 	if err != nil {

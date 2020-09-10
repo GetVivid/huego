@@ -1,12 +1,13 @@
 package huego
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetRules(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	rules, err := b.GetRules()
 	if err != nil {
 		t.Fatal(err)
@@ -34,7 +35,7 @@ func TestGetRules(t *testing.T) {
 }
 
 func TestGetRule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	l, err := b.GetRule(1)
 	if err != nil {
 		t.Fatal(err)
@@ -48,7 +49,7 @@ func TestGetRule(t *testing.T) {
 }
 
 func TestCreateRule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	conditions := []*Condition{
 		{
 			Address:  "/sensors/2/state/buttonevent",
@@ -84,7 +85,7 @@ func TestCreateRule(t *testing.T) {
 }
 
 func TestUpdateRule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	rule := &Rule{
 		Actions: []*RuleAction{
@@ -110,7 +111,7 @@ func TestUpdateRule(t *testing.T) {
 }
 
 func TestDeleteRule(t *testing.T) {
-	b := New(hostname, username)
+	b := New(hostname, username, clientKey)
 	id := 1
 	err := b.DeleteRule(id)
 	if err != nil {
