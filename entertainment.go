@@ -133,7 +133,6 @@ func (g *EntertainmentStream) Set(lights map[int][]float32) {
 		y := floatToXY(color[1])
 		b := floatToXY(color[2])
 
-		fmt.Println(x, y)
 		msg = append(msg, []byte{0, 0, byte(id), x[0], x[1], y[0], y[1], b[0], b[1]}...)
 	}
 
